@@ -34,40 +34,40 @@ const Button = (props) => {
 }
 
 const Statistics = ({ good, neutral, bad }) => {
-    return (
-        <dl>
-            <dt>good {good}</dt>
-            <dt>neutral {neutral}</dt>
-            <dt>bad {bad}</dt>
-            <Total good={good} neutral={neutral} bad={bad} />
-            <Average good={good} neutral={neutral} bad={bad} />
-            <Positive good={good} neutral={neutral} bad={bad} />
-        </dl>
-    )
-}
-
-const Total = ({ good, neutral, bad }) => {
-    let total = good + neutral + bad
-    return (        
-        <dt>total {total}</dt>
-    )
-}
-
-const Average = ({ good, neutral, bad }) => {
-    let average = 0
-    if (good > 0 || neutral > 0 || bad > 0) {
-        average = (good - bad) / (good + neutral + bad)
+    let total = Total(good, neutral, bad)
+    if (total > 0) {
+        return (
+            <dl>
+                <dt>good {good}</dt>
+                <dt>neutral {neutral}</dt>
+                <dt>bad {bad}</dt>
+                <dt>total {total}</dt>
+                <Average good={good} bad={bad} total={total} />
+                <Positive good={good} total={total} />
+            </dl>
+        )
     }
+    return (<p>No feedback given</p>)
+}
 
+const Total = (good, neutral, bad) => {
+    return good + neutral + bad
+}
+
+const Average = ({ good, bad, total }) => {
+    let average = 0
+    if (total > 0) {
+        average = (good - bad) / (total)
+    }
     return (
         <dt>average {average}</dt>
     )
 }
 
-const Positive = ({ good, neutral, bad }) => {
+const Positive = ({ good, total }) => {
     let positive = 0
-    if (good > 0 || neutral > 0 || bad > 0) {
-        positive = (good / (good + neutral + bad)) * 100
+    if (total > 0) {
+        positive = (good / (total)) * 100
     }
     return (
         <dt>positive {positive} %</dt>
