@@ -25,53 +25,41 @@ const Header = (header) => {
     return <h1>{header.text}</h1>
 }
 
-const Button = (props) => {
-    return (
-        <button onClick={props.onClick}>
-            {props.text}
-        </button>
-    )
-}
+const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
 const Statistics = ({ good, neutral, bad }) => {
     let total = Total(good, neutral, bad)
     if (total > 0) {
         return (
-            <dl>
-                <dt>good {good}</dt>
-                <dt>neutral {neutral}</dt>
-                <dt>bad {bad}</dt>
-                <dt>total {total}</dt>
-                <Average good={good} bad={bad} total={total} />
-                <Positive good={good} total={total} />
-            </dl>
+            <div>
+                <StatisticsLine text={'good'} value={good} />
+                <StatisticsLine text={'neutral'} value={neutral} />
+                <StatisticsLine text={'bad'} value={bad} />
+                <StatisticsLine text={'total'} value={total} />
+                <StatisticsLine text={'average'} value={Average(good, bad, total)} />
+                <StatisticsLine text={'positive'} value={Positive(good, total)} additional={'%'} />
+            </div>
         )
     }
     return (<p>No feedback given</p>)
 }
 
-const Total = (good, neutral, bad) => {
-    return good + neutral + bad
+const StatisticsLine = ({ text, value, additional = '' }) => <dt>{text} {value} {additional}</dt>
+
+const Total = (good, neutral, bad) => good + neutral + bad
+
+const Average = (good, bad, total) => {
+    if (total > 0) {
+        return (good - bad) / (total)
+    }
+    return 0
 }
 
-const Average = ({ good, bad, total }) => {
-    let average = 0
+const Positive = (good, total) => {
     if (total > 0) {
-        average = (good - bad) / (total)
+        return (good / (total)) * 100
     }
-    return (
-        <dt>average {average}</dt>
-    )
-}
-
-const Positive = ({ good, total }) => {
-    let positive = 0
-    if (total > 0) {
-        positive = (good / (total)) * 100
-    }
-    return (
-        <dt>positive {positive} %</dt>
-    )
+    return 0
 }
 
 export default App
