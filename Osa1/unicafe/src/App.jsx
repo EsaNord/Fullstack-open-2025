@@ -31,20 +31,23 @@ const Statistics = ({ good, neutral, bad }) => {
     let total = Total(good, neutral, bad)
     if (total > 0) {
         return (
-            <div>
-                <StatisticsLine text={'good'} value={good} />
-                <StatisticsLine text={'neutral'} value={neutral} />
-                <StatisticsLine text={'bad'} value={bad} />
-                <StatisticsLine text={'total'} value={total} />
-                <StatisticsLine text={'average'} value={Average(good, bad, total)} />
-                <StatisticsLine text={'positive'} value={Positive(good, total)} additional={'%'} />
-            </div>
+            <table>
+                <tbody>
+                    <StatisticsLine text={'good'} value={good} />
+                    <StatisticsLine text={'neutral'} value={neutral} />
+                    <StatisticsLine text={'bad'} value={bad} />
+                    <StatisticsLine text={'total'} value={total} />
+                    <StatisticsLine text={'average'} value={Average(good, bad, total)} />
+                    <StatisticsLine text={'positive'} value={Positive(good, total)} additional={'%'} />
+                </tbody>
+            </table>
         )
     }
     return (<p>No feedback given</p>)
 }
 
-const StatisticsLine = ({ text, value, additional = '' }) => <dt>{text} {value} {additional}</dt>
+const StatisticsLine = ({ text, value, additional = '' }) =>
+    <tr><td>{text}</td><td>{value} {additional}</td></tr>
 
 const Total = (good, neutral, bad) => good + neutral + bad
 
